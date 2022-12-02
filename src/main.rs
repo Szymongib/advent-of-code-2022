@@ -1,7 +1,8 @@
-use std::{process, fmt::Display, path::Path, env};
+use std::{env, fmt::Display, process};
 
-mod util;
 mod day01;
+mod day02;
+mod util;
 
 pub fn run_task<T, O>(func: T, day: u16, task: u16, input: &str)
 where
@@ -28,8 +29,10 @@ fn main() {
     let args: [&str; 2] = [&args[1], &args[2]];
 
     match args {
-        ["1", "1"] => run_task(day01::day_1_1, 1, 1, include_str!("../inputs/01.1.txt")),
-        ["1", "2"] => run_task(day01::day_1_2, 1, 2, include_str!("../inputs/01.1.txt")),
+        ["1", "1"] => run_task(day01::day_1_1, 1, 1, include_str!("../inputs/01.txt")),
+        ["1", "2"] => run_task(day01::day_1_2, 1, 2, include_str!("../inputs/01.txt")),
+        ["2", "1"] => run_task(day02::day_2_1, 2, 1, include_str!("../inputs/02.txt")),
+        ["2", "2"] => run_task(day02::day_2_2, 2, 2, include_str!("../inputs/02.txt")),
         [day, task] => {
             println!("Invalid arguments, day: {}, task: {}", day, task);
             process::exit(1)
@@ -40,6 +43,7 @@ fn main() {
 #[cfg(test)]
 mod test {
     use crate::day01::{day_1_1, day_1_2};
+    use crate::day02::{day_2_1, day_2_2};
     use std::fs;
     use std::path::Path;
     use std::str::FromStr;
@@ -61,12 +65,21 @@ mod test {
     #[test]
     fn test_with_inputs() {
         assert_eq!(
-            day_1_1(include_str!("../inputs/01.1.txt")).expect("day 1_1 failed"),
+            day_1_1(include_str!("../inputs/01.txt")).expect("day 1_1 failed"),
             read_output(out_path("01.1.txt"))
         );
         assert_eq!(
-            day_1_2(include_str!("../inputs/01.1.txt")).expect("day 1_2 failed"),
+            day_1_2(include_str!("../inputs/01.txt")).expect("day 1_2 failed"),
             read_output(out_path("01.2.txt"))
+        );
+
+        assert_eq!(
+            day_2_1(include_str!("../inputs/02.txt")).expect("day 2_1 failed"),
+            read_output(out_path("02.1.txt"))
+        );
+        assert_eq!(
+            day_2_2(include_str!("../inputs/02.txt")).expect("day 2_2 failed"),
+            read_output(out_path("02.2.txt"))
         );
     }
 }
