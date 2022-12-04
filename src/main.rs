@@ -6,7 +6,7 @@ mod day03;
 mod day04;
 mod util;
 
-pub fn run_task<T, O>(func: T, day: u16, task: u16, input: &str)
+pub fn run_task<T, O>(func: T, day: &str, task: &str, input: &str)
 where
     T: Fn(&str) -> anyhow::Result<O>,
     O: Display,
@@ -31,14 +31,30 @@ fn main() {
     let args: [&str; 2] = [&args[1], &args[2]];
 
     match args {
-        ["1", "1"] => run_task(day01::day_1_1, 1, 1, include_str!("../inputs/01.txt")),
-        ["1", "2"] => run_task(day01::day_1_2, 1, 2, include_str!("../inputs/01.txt")),
-        ["2", "1"] => run_task(day02::day_2_1, 2, 1, include_str!("../inputs/02.txt")),
-        ["2", "2"] => run_task(day02::day_2_2, 2, 2, include_str!("../inputs/02.txt")),
-        ["3", "1"] => run_task(day03::task_1, 3, 1, include_str!("../inputs/03.txt")),
-        ["3", "2"] => run_task(day03::task_2, 3, 2, include_str!("../inputs/03.txt")),
-        ["4", "1"] => run_task(day04::task_1, 4, 1, include_str!("../inputs/04.txt")),
-        ["4", "2"] => run_task(day04::task_2, 4, 2, include_str!("../inputs/04.txt")),
+        [day @ "1", task @ "1"] => {
+            run_task(day01::day_1_1, day, task, include_str!("../inputs/01.txt"))
+        }
+        [day @ "1", task @ "2"] => {
+            run_task(day01::day_1_2, day, task, include_str!("../inputs/01.txt"))
+        }
+        [day @ "2", task @ "1"] => {
+            run_task(day02::day_2_1, day, task, include_str!("../inputs/02.txt"))
+        }
+        [day @ "2", task @ "2"] => {
+            run_task(day02::day_2_2, day, task, include_str!("../inputs/02.txt"))
+        }
+        [day @ "3", task @ "1"] => {
+            run_task(day03::task_1, day, task, include_str!("../inputs/03.txt"))
+        }
+        [day @ "3", task @ "2"] => {
+            run_task(day03::task_2, day, task, include_str!("../inputs/03.txt"))
+        }
+        [day @ "4", task @ "1"] => {
+            run_task(day04::task_1, day, task, include_str!("../inputs/04.txt"))
+        }
+        [day @ "4", task @ "2"] => {
+            run_task(day04::task_2, day, task, include_str!("../inputs/04.txt"))
+        }
         [day, task] => {
             println!("Invalid arguments, day: {}, task: {}", day, task);
             process::exit(1)

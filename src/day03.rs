@@ -1,4 +1,4 @@
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 pub fn task_1(input: &str) -> anyhow::Result<u64> {
     let priority_sum: u64 = input
@@ -7,16 +7,17 @@ pub fn task_1(input: &str) -> anyhow::Result<u64> {
         .map(|line| {
             let c = find_item_in_both_parts(line);
             get_item_priority(c)
-        }).sum();
+        })
+        .sum();
 
     Ok(priority_sum)
 }
 
 fn find_item_in_both_parts(s: &str) -> char {
-    assert!(s.len()%2 == 0);
+    assert!(s.len() % 2 == 0);
 
-    let p1 = &s[..s.len()/2];
-    let p2 = &s[s.len()/2..];
+    let p1 = &s[..s.len() / 2];
+    let p2 = &s[s.len() / 2..];
 
     let mut elems = HashSet::new();
     for c in p1.chars() {
@@ -40,18 +41,14 @@ fn get_item_priority(item: char) -> u64 {
 }
 
 pub fn task_2(input: &str) -> anyhow::Result<u64> {
-     let rucksacks: Vec<&str> = input
-        .split("\n")
-        .filter(|l| !l.is_empty())
-        .collect();
+    let rucksacks: Vec<&str> = input.split("\n").filter(|l| !l.is_empty()).collect();
 
-    let sum = rucksacks.chunks(3).map(|group| {
-        get_item_priority(
-            find_id_in_group(group)
-        )
-    }).sum();
+    let sum = rucksacks
+        .chunks(3)
+        .map(|group| get_item_priority(find_id_in_group(group)))
+        .sum();
 
-     Ok(sum)
+    Ok(sum)
 }
 
 fn find_id_in_group(group: &[&str]) -> char {
@@ -96,4 +93,3 @@ CrZsJsPPZsGzwwsLwLmpwMDw";
         assert_eq!(task_2(INPUT).expect("failed to run 2"), 70);
     }
 }
-
