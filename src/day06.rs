@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap};
 
 pub fn task_1(input: &str) -> anyhow::Result<usize> {
     let mut used = HashMap::new();
