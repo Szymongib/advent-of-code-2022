@@ -28,3 +28,14 @@ pub fn temp_file_with_content(name: &str, content: &str) -> PathBuf {
     fs::write(&full_path, content).expect("failed to write temp file");
     full_path
 }
+
+pub fn parse_to_digit_grid(input: &str) -> Vec<Vec<u32>> {
+    input
+        .split("\n")
+        .map(|s| {
+            s.chars()
+                .map(|c| c.to_digit(10).expect("failed to parse to digit"))
+                .collect()
+        })
+        .collect()
+}

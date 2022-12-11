@@ -1,4 +1,4 @@
-use std::{collections::{HashMap}, rc::Rc, cell::RefCell};
+use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
 use anyhow::Ok;
 
@@ -10,7 +10,7 @@ struct FsEntry {
 
 enum FsContent {
     File(usize),
-    Dir(Vec<Rc<RefCell<FsEntry>>>)
+    Dir(Vec<Rc<RefCell<FsEntry>>>),
 }
 
 fn parse_fs_tree(input: &str) -> Rc<RefCell<FsEntry>> {
@@ -28,44 +28,38 @@ fn parse_fs_tree(input: &str) -> Rc<RefCell<FsEntry>> {
     for line in input.split("\n") {
         let parts: Vec<&str> = line.split(" ").collect();
         match parts[0] {
-            "$" => {
-                match parts[1] {
-                    "ls" => {},
-                    "cd" => {
-                        match parts[2] {
-                            ".." => {
-                                path.pop();
-                                let parent = {
-                                    curr_dir.borrow().parent.clone().unwrap()
-                                };
-                                curr_dir = parent
-                            },
-                            dir => {
-                                path.push(dir.to_string());
-                                let new_entry = Rc::new(RefCell::new(FsEntry{
-                                    parent: Some(curr_dir.clone()),
-                                    path: path.join("/"),
-                                    content: FsContent::Dir(vec![]),
-                                }));
-                                {
-                                    let mut cur_dir_mut = curr_dir.borrow_mut();
-                                    if let FsContent::Dir(children) = &mut cur_dir_mut.content {
-                                        children.push(new_entry.clone());
-                                    } else {
-                                        panic!("unexpected thingy");
-                                    }
-                                }
-                                curr_dir = new_entry;
+            "$" => match parts[1] {
+                "ls" => {}
+                "cd" => match parts[2] {
+                    ".." => {
+                        path.pop();
+                        let parent = { curr_dir.borrow().parent.clone().unwrap() };
+                        curr_dir = parent
+                    }
+                    dir => {
+                        path.push(dir.to_string());
+                        let new_entry = Rc::new(RefCell::new(FsEntry {
+                            parent: Some(curr_dir.clone()),
+                            path: path.join("/"),
+                            content: FsContent::Dir(vec![]),
+                        }));
+                        {
+                            let mut cur_dir_mut = curr_dir.borrow_mut();
+                            if let FsContent::Dir(children) = &mut cur_dir_mut.content {
+                                children.push(new_entry.clone());
+                            } else {
+                                panic!("unexpected thingy");
                             }
                         }
-                    },
-                    cmd => unreachable!("undexpected command: {}", cmd)
-                }
+                        curr_dir = new_entry;
+                    }
+                },
+                cmd => unreachable!("undexpected command: {}", cmd),
             },
-            "dir" => {},
+            "dir" => {}
             num => {
                 let size: usize = num.parse().expect("expected number");
-                let new_entry = Rc::new(RefCell::new(FsEntry{
+                let new_entry = Rc::new(RefCell::new(FsEntry {
                     parent: Some(curr_dir.clone()),
                     path: path.join("/"),
                     content: FsContent::File(size),
@@ -88,12 +82,13 @@ fn entry_size(fs_entry: Rc<RefCell<FsEntry>>, sizes: &mut HashMap<String, usize>
     match &entry.content {
         FsContent::File(size) => *size,
         FsContent::Dir(ch) => {
-            let sum = ch.iter().map(|e| {
-                entry_size(e.clone(), sizes)
-            }).sum::<usize>();
+            let sum = ch
+                .iter()
+                .map(|e| entry_size(e.clone(), sizes))
+                .sum::<usize>();
             *sizes.entry(entry.path.clone()).or_insert(0) = sum;
             sum
-        },
+        }
     }
 }
 
@@ -106,7 +101,7 @@ pub fn task_1(input: &str) -> anyhow::Result<usize> {
     let mut sum = 0;
     for (_k, v) in sizes {
         if v <= 100000 {
-            sum +=v;
+            sum += v;
         }
     }
 
@@ -122,7 +117,7 @@ pub fn task_2(input: &str) -> anyhow::Result<usize> {
     let update_space = 30000000;
     let av_space = 70000000 - root_size;
     let need_space = update_space - av_space;
-    
+
     let mut min_ok_size = root_size;
     let mut min_diff = root_size - need_space;
 
