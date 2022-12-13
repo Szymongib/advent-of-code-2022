@@ -56,12 +56,12 @@ pub fn task_2(input: &str) -> anyhow::Result<usize> {
 
     for i in 0..rows_count {
         for k in 0..cols_count {
-            let up = view_distance(&trees_grid, (i as i32, k as i32), (-1, 0));
-            let down = view_distance(&trees_grid, (i as i32, k as i32), (1, 0));
-            let left = view_distance(&trees_grid, (i as i32, k as i32), (0, -1));
-            let right = view_distance(&trees_grid, (i as i32, k as i32), (0, 1));
+            let score = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+                .iter()
+                .map(|d| view_distance(&trees_grid, (i as i32, k as i32), *d))
+                .product::<u32>();
 
-            max_score = max_score.max(up * down * left * right);
+            max_score = max_score.max(score);
         }
     }
 
