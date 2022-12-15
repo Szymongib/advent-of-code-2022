@@ -39,3 +39,7 @@ pub fn parse_to_digit_grid(input: &str) -> Vec<Vec<u32>> {
         })
         .collect()
 }
+
+pub fn parse_to_char_grid(input: &str) -> Vec<Vec<char>> {
+    input.split("\n").map(|s| s.chars().collect()).collect()
+}

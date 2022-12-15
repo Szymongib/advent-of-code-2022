@@ -11,6 +11,7 @@ mod day08;
 mod day09;
 mod day10;
 mod day11;
+mod day12;
 mod util;
 
 pub fn run_task<T, O>(func: T, day: &str, task: &str, input: &str)
@@ -104,6 +105,12 @@ fn main() {
         [day @ "11", task @ "2"] => {
             run_task(day11::task_2, day, task, include_str!("../inputs/11.txt"))
         }
+        [day @ "12", task @ "1"] => {
+            run_task(day12::task_1, day, task, include_str!("../inputs/12.txt"))
+        }
+        [day @ "12", task @ "2"] => {
+            run_task(day12::task_2, day, task, include_str!("../inputs/12.txt"))
+        }
         [day, task] => {
             println!("Invalid arguments, day: {}, task: {}", day, task);
             process::exit(1)
@@ -124,6 +131,7 @@ mod test {
     use crate::day09;
     use crate::day10;
     use crate::day11;
+    use crate::day12;
     use std::fs;
     use std::path::Path;
     use std::str::FromStr;
@@ -241,6 +249,15 @@ mod test {
         assert_eq!(
             day11::task_2(include_str!("../inputs/11.txt")).expect("day 11_2 failed"),
             read_output(out_path("11.2.txt"))
+        );
+
+        assert_eq!(
+            day12::task_1(include_str!("../inputs/12.txt")).expect("day 12_1 failed"),
+            read_output(out_path("12.1.txt"))
+        );
+        assert_eq!(
+            day12::task_2(include_str!("../inputs/12.txt")).expect("day 12_2 failed"),
+            read_output(out_path("12.2.txt"))
         );
     }
 }
